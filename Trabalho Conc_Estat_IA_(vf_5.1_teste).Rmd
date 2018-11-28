@@ -1,0 +1,1337 @@
+
+---
+title: "t"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+##Conceitos Estatísticos para IA
+##Trabalho: Uso e análise dos conceitos e técnicas estatísticas
+##Turma 2IA
+##prof.: Adelaide Alves de Oliveira
+##Grupo:
+##Fábio Alex de Queiroz Jacob - RM 330989
+##Allan Almeida - RM 330858
+##Luca Pasquale - RM 330726
+
+
+# Base   
+
+
+# Limpar memória do R
+```{r}
+rm(list=ls(all=TRUE))
+```
+
+# BaseWine - instalando pacotes
+
+
+install.packages("psych")
+install.packages("plotly")
+install.packages("gmodels")
+install.packages("corrgram")
+install.packages("lmtest")
+install.packages("rpart")
+install.packages("randomForest")
+install.packages("ROCR")
+install.packages("pROC")
+
+
+# Mostrar até 2 casas decimais
+```{r}
+options("scipen" = 2)
+```
+
+# Ler arquivo csv
+```{r}
+Vinhos <- read.csv2("C:/BaseWine_Red_e_White2018.csv")
+```
+
+# Mostrar a Tabela da Base de Dados
+```{r}
+fix(Vinhos)
+```
+
+# Mostrar o formato das variáveis (Tabela da Base de Dados)
+```{r}
+str(Vinhos)
+```
+
+# Mmostra as variáveis
+```{r}
+names(Vinhos)
+```
+
+```{r}
+attach(Vinhos)
+```
+
+# Frequência Absoluta 
+```{r}
+table(as.factor(Vinhos$quality), Vinhos$Vinho, useNA = "ifany")
+```
+
+```{r}
+table(as.factor(Vinhos$quality), Vinhos$Vinho)
+```
+
+
+# Tabela Cruzada (2-Way Cross Tabulation)
+```{r}
+library(gmodels)
+CrossTable(as.factor(Vinhos$quality), Vinhos$Vinho) 
+```
+
+```{r}
+summary(Vinhos)
+```
+
+```{r}
+mean(Vinhos$quality) # média
+
+median(Vinhos$quality) # médiana
+
+quantile(Vinhos$quality,type=4)  # Quartis
+
+quantile(Vinhos$quality,.65,type=4) # exato percentil
+
+range(Vinhos$quality)  # amplitude
+
+diff(range(Vinhos$quality)) # diferença entre o maior e o menor valor
+
+min(Vinhos$quality)  ## valor mínimo de x
+
+max(Vinhos$quality)  ## valor máximo de x
+
+var(Vinhos$quality) ## para obter a variância
+
+sd(Vinhos$quality)  ## para obter o desvio padrão
+```
+
+```{r}
+CV_quality<-sd(Vinhos$quality)/mean(Vinhos$quality)*100  # para obter o coefiiente de variação
+CV_quality
+```
+
+# Comando para gerar em 3 linhas e 4 colunas os Histogramas
+```{r}
+par (mfrow=c(3,4))
+hist(fixedacidity)
+hist(volatileacidity)
+hist(citricacid )
+hist(residualsugar)
+hist(chlorides)
+hist(freesulfurdioxide)
+hist(totalsulfurdioxide)
+hist(density)
+hist(pH)
+hist(sulphates)
+hist(alcohol)
+hist(quality)
+```
+
+
+```{r}
+hist(quality, col=c("blue"), col.main="darkgray", prob=T)
+```
+
+```{r}
+attach(Vinhos)
+```
+
+
+# Comando para gerar em 3 linhas e 4 colunas os Histogramas
+```{r}
+par (mfrow=c(3,4))
+boxplot(fixedacidity, main='fixedacidity')
+boxplot(volatileacidity , main='volatileacidity')
+boxplot(citricacid , main='citricacid')
+boxplot(residualsugar, main='residualsugar')
+boxplot(chlorides, main='chlorides')
+boxplot(freesulfurdioxide, main='freesulfurdioxide')
+boxplot(totalsulfurdioxide, main='totalsulfurdioxide')
+boxplot(density, main='density')
+boxplot(pH, main='pH')
+boxplot(sulphates, main='sulphates')
+boxplot(alcohol, main='alcohol')
+boxplot(Vinhos$quality, main='quality')
+```
+
+# Comando para gerar em 1 linha e 1 coluna os Histogramas 
+```{r}
+par (mfrow=c(1,1))
+boxplot(fixedacidity, main='fixedacidity')
+```
+
+```{r}
+par (mfrow=c(1,1))
+boxplot(volatileacidity , main='volatileacidity')
+```
+
+```{r}
+par (mfrow=c(1,1))
+boxplot(citricacid , main='citricacid')
+```
+
+```{r}
+par (mfrow=c(1,1))
+boxplot(residualsugar, main='residualsugar')
+```
+
+```{r}
+par (mfrow=c(1,1))
+boxplot(chlorides, main='chlorides')
+```
+
+```{r}
+par (mfrow=c(1,1))
+boxplot(freesulfurdioxide, main='freesulfurdioxide')
+```
+
+```{r}
+par (mfrow=c(1,1))
+boxplot(totalsulfurdioxide, main='totalsulfurdioxide')
+```
+
+```{r}
+par (mfrow=c(1,1))
+boxplot(density, main='density')
+```
+
+```{r}
+par (mfrow=c(1,1))
+boxplot(pH, main='pH')
+```
+
+```{r}
+par (mfrow=c(1,1))
+boxplot(sulphates, main='sulphates')
+```
+
+```{r}
+par (mfrow=c(1,1))
+boxplot(alcohol, main='alcohol')
+```
+
+```{r}
+par (mfrow=c(1,1))
+boxplot(quality, main='quality')
+```
+
+dev.off()
+
+```{r}
+boxplot(quality ~ Vinho, main='quality', col=c('red','blue'))
+```
+
+```{r}
+boxplot(fixedacidity ~ Vinho, main='fixedacidity',col=c('red','blue'))
+```
+
+```{r}
+boxplot(volatileacidity ~ Vinho , main='volatileacidity', col=c('red','blue'))
+```
+
+```{r}
+boxplot(citricacid ~ Vinho, main='citricacid', col=c('red','blue'))
+```
+
+```{r}
+boxplot(residualsugar ~ Vinho, main='residualsugar',col=c('red','blue'))
+```
+
+```{r}
+boxplot(chlorides ~ Vinho, main='chlorides', col=c('red','blue'))
+```
+
+```{r}
+boxplot(freesulfurdioxide ~ Vinho, main='freesulfurdioxide', col=c('red','blue'))
+```
+
+```{r}
+boxplot(totalsulfurdioxide ~ Vinho, main='totalsulfurdioxide', col=c('red','blue'))
+```
+
+```{r}
+boxplot(density ~ Vinho, main='density', col=c('red','blue'))
+```
+
+```{r}
+boxplot(pH ~ Vinho, main='pH', col=c('red','blue'))
+```
+
+```{r}
+boxplot(sulphates ~ Vinho, main='sulphates', col=c('red','blue'))
+```
+
+```{r}
+boxplot(alcohol ~ Vinho, main='alcohol', col=c('red','blue'))
+```
+
+
+# Gráfico de Dispersão (pch=caracter, lwd=largura)
+
+```{r}
+plot(freesulfurdioxide~totalsulfurdioxide)
+plot(freesulfurdioxide~totalsulfurdioxide, pch=1, lwd=3)
+```
+
+```{r}
+plot(freesulfurdioxide~totalsulfurdioxide)
+abline(v=mean(freesulfurdioxide), col="red")
+abline(h=mean(totalsulfurdioxide), col="green")
+```
+
+```{r}
+attach(Vinhos)
+```
+
+
+```{r}
+Vinhos$fx_redSugar <- cut(residualsugar,breaks=c(0,10,20,30,max(residualsugar)))  
+Vinhos$fx_redSugar
+```
+
+```{r}
+str(Vinhos)
+```
+
+```{r}
+CrossTable( Vinhos$fx_redSugar , Vinhos$Vinho) 
+```
+
+```{r}
+attach(Vinhos)
+```
+
+
+```{r}
+library(psych)
+```
+
+```{r}
+describe(Vinhos)
+```
+
+# describe
+# A data.frame of the relevant statistics:
+# item name
+# item number
+# number of valid cases
+# mean
+# standard deviation
+# trimmed mean (with trim defaulting to .1)
+# median (standard or interpolated)
+# mad: median absolute deviation (from the median)
+# minimum
+# maximum
+# skew
+# kurtosis
+# standard error
+
+```{r}
+summary(Vinhos)
+```
+
+## De acordo com a Tabela Cruzada de notas vs vinho, podemos analisar
+## que os vinhos brancos têm maiores notas que os vinhos tintos.
+## Diante disso, seguiremos as análises com os vinhos brancos (WHITE)
+## (Obs.: nesta análise, poderia ser aplicada um teste t)
+
+
+```{r}
+white <- subset(Vinhos, Vinho=="WHITE", select=c(quality,fixedacidity,volatileacidity,citricacid,residualsugar,
+                                                 chlorides,freesulfurdioxide,totalsulfurdioxide,density,pH,
+                                                 sulphates,alcohol))
+```
+
+
+# Estatísticas Descritivas
+
+```{r}
+summary(white)
+```
+
+```{r}
+str(white)
+```
+ 
+```{r}
+attach(white)
+```
+
+
+# Estatísticas Descritivas
+
+```{r}
+par (mfrow=c(3,4))
+boxplot(fixedacidity, main='fixedacidity')
+boxplot(volatileacidity , main='volatileacidity')
+boxplot(citricacid , main='citricacid')
+boxplot(residualsugar, main='residualsugar')
+boxplot(chlorides, main='chlorides')
+boxplot(freesulfurdioxide, main='freesulfurdioxide')
+boxplot(totalsulfurdioxide, main='totalsulfurdioxide')
+boxplot(density, main='density')
+boxplot(pH, main='pH')
+boxplot(sulphates, main='sulphates')
+boxplot(alcohol, main='alcohol')
+boxplot(quality, main='quality')
+```
+
+
+dev.off()
+
+```{r}
+boxplot.stats(white$residualsugar)
+```
+
+
+```{r}
+AIQ_residualsugar<-quantile(white$residualsugar,.75,type=2)-quantile(white$residualsugar,.25,type=2)
+AIQ_residualsugar
+```
+
+```{r}
+limsup_residualsugar= quantile(white$residualsugar,.75,type=4)+1.5*AIQ_residualsugar
+limsup_residualsugar
+```
+
+```{r}
+liminf_residualsugar= quantile(white$residualsugar,.25,type=2)-1.5*AIQ_residualsugar
+liminf_residualsugar
+```
+
+
+# Excluir outliers
+
+```{r}
+plot(quality~residualsugar)
+```
+
+
+```{r}
+white1<-subset(white, residualsugar<=40) 
+```
+
+```{r}
+fix(white1)
+```
+
+```{r}
+attach(white1)
+```
+
+```{r}
+summary(white1)
+```
+
+```{r}
+plot(residualsugar,alcohol)
+abline(v=mean(residualsugar), col="red")
+abline(h=mean(alcohol), col="green")
+```
+
+# Matriz de Correlações
+
+```{r}
+matcor <- cor(white1)
+print(matcor, digits = 2)
+```
+
+
+```{r}
+library(corrgram)
+corrgram(matcor, type = "cor", lower.panel = panel.shade, upper.panel = panel.pie)
+```
+
+
+```{r}
+panel.cor <- function(x, y, digits=2, prefix ="", cex.cor,
+                      ...)  {
+  usr <- par("usr")
+  on.exit(par(usr))
+  par(usr = c(0, 1, 0, 1))
+  r <- cor(x, y , use = "pairwise.complete.obs")
+  txt <- format(c(r, 0.123456789), digits = digits) [1]
+  txt <- paste(prefix, txt, sep = "")
+  if (missing(cex.cor))
+    cex <- 0.8/strwidth(txt)
+  # abs(r) é para que na saída as correlações ficam proporcionais
+  text(0.5, 0.5, txt, cex = cex * abs(r))
+}
+```
+
+
+```{r}
+# pdf(file = "grafico.pdf")
+pairs(white1, lower.panel=panel.smooth, upper.panel=panel.cor)
+```
+
+dev.off()
+
+
+# PCA - Principal Components Analysis
+
+
+# Padronização ("Normalização") 
+
+# Avaliar início
+
+```{r}
+dados_normalizados = as.data.frame(scale(white1))
+```
+
+```{r}
+names(dados_normalizados)
+```
+
+```{r}
+summary(dados_normalizados)
+```
+
+
+# Componentes Principais
+
+```{r}
+pca1 <- princomp(white1[complete.cases(white1),], cor=TRUE)
+summary(pca1)
+```
+
+# Gráfico pca1
+
+```{r}
+plot(pca1) 
+```
+
+## Análise Fatorial (Pacote PSYCH)
+
+```{r}
+library(psych)
+```
+
+
+## Componentes Principais
+```{r}
+pc <- principal(white1,3,rotate="varimax")  
+pc
+```
+
+## Gráfico pc
+```{r}
+plot(pc)
+```
+
+```{r}
+str(dados_normalizados)
+```
+
+```{r}
+names(dados_normalizados)
+```
+
+```{r}
+load=loadings(pc)
+print(load,sort=TRUE,digits=3,cutoff=0.01)  
+```
+
+```{r}
+plot(load)
+identify(load,labels=names(dados_normalizados))
+```
+
+# Colocar os nomes dos pontos selecionados na figura ---- para parar, clique com o "command key" (tecla "Esc")
+```{r}
+plot(pc,labels=names(dados_normalizados))
+```
+
+
+# Análise Fatorial (utilizando KMO - Kaiser-Meyer-Olkin)
+```{r}
+library(psych)
+```
+
+```{r}
+KMO(matcor)
+```
+
+# Componentes Principais 
+```{r}
+fit2 <- princomp(white1[complete.cases(white1),], cor=TRUE)
+summary(fit2)
+```
+
+```{r}
+loadings(fit2) # pc loadings
+plot(fit2,type="lines", cex=1, col = "dark red") # Gráfico fit2
+```
+
+# Componentes Principais (Histograma)
+
+```{r}
+hist(fit2$scores)
+```
+
+```{r}
+biplot(fit2, cex=0.65)
+```
+
+```{r}
+library(psych)
+```
+
+
+# Escolhendo os Componentes Principais
+```{r}
+fa.parallel (white1, fa="pc", show.legend=FALSE, main = "Eigenvalues dos Componentes Principais")
+```
+
+dev.off()
+
+# Rotação varimax
+```{r}
+library(psych)
+```
+
+# Rotação varimax - Componentes Principais
+
+# Extração dos fatores
+```{r}
+vinhospca  <- principal(white1, nfactors=4, scores=T, rotate="varimax")
+vinhospca  # Resultados 
+```
+
+```{r}
+fator01 = vinhospca$scores[,1]
+hist(fator01)
+```
+
+```{r}
+fator02 = vinhospca$scores[,2]
+hist(fator02)
+```
+
+```{r}
+fator03 = vinhospca$scores[,3]
+hist(fator03)
+```
+
+```{r}
+fator04 = vinhospca$scores[,4]
+hist(fator04)
+```
+
+```{r}
+matriz <- cbind(white1,fator01,fator02,fator03,fator04)
+```
+
+```{r}
+fix(matriz)
+```
+
+
+```{r}
+attach(matriz)
+```
+
+dev.off()
+
+
+# Padronização 
+
+# Avaliar início
+```{r}
+dados_padronizados = as.data.frame(scale(white))
+```
+
+```{r}
+names(dados_padronizados)
+```
+
+```{r}
+summary(dados_padronizados)
+```
+
+# Mostrar até 2 casas decimais
+```{r}
+options("scipen" = 2)
+```
+
+```{r}
+View(white)
+```
+
+# Trabalhar com as variáveis 
+```{r}
+attach(white)
+```
+
+# Verificando o formato das variáveis
+```{r}
+str(white)
+```
+
+# Medidas - Resumo (Estatísticas Descritivas - "white")
+```{r}
+summary(white)
+```
+
+
+#Comando para gerar em 4 linhas e 3 colunas os Histogramas
+```{r}
+par (mfrow=c(4,3))
+hist(white$fixedacidity)
+hist(white$volatileacidity)
+hist(white$citricacid)
+hist(white$residualsugar)
+hist(white$chlorides)
+hist(white$freesulfurdioxide)
+hist(white$totalsulfurdioxide)
+hist(white$density)
+hist(white$pH)
+hist(white$sulphates)
+hist(white$alcohol)
+hist(white$quality)
+```
+
+dev.off()
+
+```{r}
+par (mfrow=c(1,1))
+boxplot(white$quality~white$residualsugar, main='quality vs residualsugar',col=c('red','blue'))
+```
+
+```{r}
+boxplot(white$quality~white$fixedacidity, main='quality vs fixedacidity',col=c('red','blue'))
+```
+
+```{r}
+boxplot(white$quality~white$alcohol, main='quality vs alcohol',col=c('red','blue'))
+```
+
+
+# Matriz de Correlações
+```{r}
+matcor <- cor(white)
+print(matcor, digits = 2)
+```
+
+
+# Visualizar correlacao
+```{r}
+library(corrgram)
+```
+
+```{r}
+corrgram(matcor, type = "cor", lower.panel = panel.shade, upper.panel = panel.pie)
+```
+
+
+install.packages("corrplot")
+library(corrplot)
+
+
+```{r}
+corrplot::corrplot(matcor, method="circle", order="hclust")
+```
+
+# Gráfico de Dispersao para a associação entre residualsugar e quality
+```{r}
+plot (x = white$residualsugar, y = white$quality,
+      main = "Gráfico de dispersão",
+      xlab = "residualsugar",
+      ylab = "quality")
+```
+
+#Gráfico de dispersao para a associação entre fixedacidity e quality
+```{r}
+plot (x = white$fixedacidity, y = white$quality,
+      main = "Gráfico de dispersão",
+      xlab = "fixedacidity",
+      ylab = "quality")
+```
+
+#Gráfico de dispersao para a associação entre alcohol e quality
+```{r}
+plot (x = white$alcohol, y = white$quality,
+      main = "Gráfico de dispersão",
+      xlab = "alcohol",
+      ylab = "quality")
+```
+
+# Opções de gráficos: Gráfico de dispersao com o plotly
+
+install.packages("plotly")
+library(plotly)
+
+plot_ly (x=white$quality  , y=white$residualsugar, type="scatter")
+plot_ly (x=white$quality  , y=white$fixedacidity, type="scatter")
+
+
+
+
+#Gráfico de Dispersao com o ggplot2
+```{r}
+library(ggplot2)
+ggplot (data= white, aes(x=white$quality, y=white$residualsugar )) + 
+  geom_point(size=0.4) +
+  geom_smooth(method="lm", color ="red", linetype=2) +
+  labs(title = "Gráfico de dispersão, qualidade e residualsugar", x="residualsugar", y="qualidade")
+```
+
+```{r}
+attach(white)
+```
+
+
+# Modelo 1 - Regressão Linear Simples
+```{r}
+modelo0 <- lm(quality ~ residualsugar)
+summary(modelo0)
+```
+
+```{r}
+modelo1 <- lm(quality ~ residualsugar+fixedacidity)
+summary(modelo1)
+```
+
+```{r}
+modelo2 <- lm(quality ~ residualsugar+fixedacidity+alcohol)
+summary(modelo2)
+```
+
+
+install.packages("lattice")
+install.packages("latticeExtra")
+install.packages("asbio")
+install.packages("car")
+
+
+library(lattice)
+
+library(latticeExtra)
+
+library(asbio)
+
+library(car)
+
+
+```{r}
+measures <- function(x) {
+  L <- list(npar = length(coef(x)),
+            dfres = df.residual(x),
+            nobs = length(fitted(x)),
+            RMSE = summary(x)$sigma,
+            R2 = summary(x)$r.squared,
+            R2adj = summary(x)$adj.r.squared,
+            PRESS = press(x),
+            logLik = logLik(x),
+            AIC = AIC(x),
+            BIC = BIC(x))
+  unlist(L)
+}
+```
+
+```{r}
+modl <- list(m2 = modelo0, m3 = modelo1, m4 = modelo2)
+round(t(sapply(modl, measures)), 3)
+```
+
+```{r}
+forward<-step(modelo1,direction="forward")
+forward
+```
+
+```{r}
+summary(forward)
+```
+
+```{r}
+backward<-step(modelo1,direction="backward")
+backward
+```
+
+```{r}
+summary(backward)
+```
+
+```{r}
+stepwise<-step(modelo1,direction="both")
+stepwise
+```
+
+```{r}
+summary(stepwise)
+```
+
+# Modelo final.
+```{r}
+modelo_fim <- lm(quality ~ residualsugar+fixedacidity+alcohol)
+summary(modelo_fim)
+```
+
+```{r}
+Val_pred <- predict(modelo_fim,interval = "prediction", level = 0.95) 
+```
+
+```{r}
+fix(Val_pred)
+```
+
+
+# Intervalo de Confianca - Grafico para Media
+```{r}
+fit <- Val_pred[,1] # valores preditos
+lower <- Val_pred[,2] # limite inferior
+upper <- Val_pred[,3] # limite superior
+```
+
+```{r}
+mse <- mean((white$quality - fit)^2)
+```
+
+```{r}
+sqrt(mse)
+```
+
+```{r}
+erro_usando_media <- mean((white$quality - mean(white$quality))^2)
+```
+
+```{r}
+sqrt(erro_usando_media)
+```
+
+
+# Grafico Residuo
+```{r}
+rs <- resid(modelo_fim)
+plot(predict(modelo_fim), rs, xlab = "Preditor Linear",ylab = "Residuos")
+abline(h = 0, lty = 2)
+```
+
+```{r}
+attach(white)
+```
+
+```{r}
+white_Final<-cbind(white,Val_pred)
+```
+
+```{r}
+fix(white_Final)
+```
+
+
+
+# Modelo 2 - Árvore de Regressão
+
+install.packages("rpart")
+install.packages("rpart.plot")
+
+library(rpart)
+
+library(rpart.plot)
+
+```{r}
+attach(white)
+```
+
+```{r}
+fix(white)
+```
+
+```{r}
+modelo_Valor_tree <- rpart (quality ~ residualsugar+fixedacidity+alcohol, data=white, 
+                            cp = 0.001,minsplit = 5,maxdepth=10)
+```
+
+
+# Faz o Gráfico
+```{r}
+rpart.plot(modelo_Valor_tree, type=4, extra=1, under=FALSE, clip.right.labs=TRUE,
+           fallen.leaves=FALSE,   digits=2, varlen=-10, faclen=20,
+           cex=0.35, tweak=1.7,
+           compress=TRUE,
+           snip=FALSE)
+```
+
+dev.off()
+
+```{r}
+Val_pred_tree <- predict(modelo_Valor_tree,interval = "prediction", level = 0.95)
+```
+
+```{r}
+str(Val_pred_tree)
+```
+ 
+```{r}
+mse_tree <- mean((white$quality - Val_pred_tree)^2)
+```
+
+```{r}
+sqrt(mse_tree)
+```
+
+```{r}
+erro_usando_media <- mean((white$quality - mean(white$quality))^2)
+```
+
+```{r}
+sqrt(erro_usando_media)
+```
+
+
+# Grafico Residuo
+```{r}
+rs <- Val_pred_tree- white$quality
+plot(predict(modelo_Valor_tree), rs, xlab = "Com Árvore de Regressão",ylab = "Residuos")
+abline(h = 0, lty = 2)
+```
+
+dev.off()
+
+
+
+# Modelo 3 - Árvore de Decisão (Técnica de Discriminação)
+
+
+install.packages("rattle")
+
+```{r}
+attach(white)  
+```
+
+```{r}
+fix(white)
+```
+
+```{r}
+str(white)
+```
+
+```{r}
+names(white)
+```
+
+```{r}
+summary(white)
+```
+
+```{r}
+white$quality <- factor(white$quality)
+```
+
+# Frequência Absoluta 
+```{r}
+table(white$quality)
+```
+
+#Comando para gerar em 1 linha e 1 coluna os plots
+```{r}
+par (mfrow=c(1,1))
+plot(white$fixedacidity, white$quality , ylab="white quality",xlab="fixedacidity",col=c('red','darkgreen'))
+```
+
+```{r}
+plot(white$volatileacidity , white$quality ,ylab="white quality",xlab="volatileacidity",col=c('red','darkgreen'))
+```
+
+```{r}
+plot(white$citricacid, white$quality, ylab="white quality",xlab="citricacid",col=c('red','darkgreen'))
+```
+
+```{r}
+plot(white$residualsugar, white$quality, ylab="white quality",xlab="residualsugar",col=c('red','darkgreen'))
+```
+
+```{r}
+plot(white$chlorides , white$quality, ylab="white quality",xlab="chlorides",col=c('red','darkgreen'))
+```
+
+```{r}
+plot(white$freesulfurdioxide, white$quality, ylab="white quality",xlab="freesulfurdioxide",col=c('red','darkgreen'))
+```
+
+```{r}
+plot(white$totalsulfurdioxide, white$quality, ylab="white quality",xlab="totalsulfurdioxide",col=c('red','darkgreen'))
+```
+
+```{r}
+plot(white$density, white$quality, ylab="white quality",xlab="density",col=c('red','darkgreen'))
+```
+
+```{r}
+plot(white$pH, white$quality, ylab="white quality",xlab="pH",col=c('red','darkgreen'))
+```
+
+```{r}
+plot(white$sulphates, white$quality, ylab="white quality",xlab="sulphates",col=c('red','darkgreen'))
+```
+
+```{r}
+plot(white$alcohol, white$quality, ylab="white quality",xlab="alcohol",col=c('red','darkgreen'))
+```
+
+dev.off()
+
+# Carrega o pacote: Árvore de Decisão
+
+library(rpart)
+
+library(rpart.plot) 
+
+
+# Informações dos Parâmetros do Modelo
+## Usa rpart para decision tree
+
+```{r}
+modelo_tree <- rpart (quality ~ residualsugar+fixedacidity+alcohol, data=white, cp = 0.008,minsplit = 250,maxdepth=10)
+```
+
+
+# Faz o Gráfico
+```{r}
+rpart.plot(modelo_tree, type=4, extra=104, under=FALSE, clip.right.labs=TRUE,
+           fallen.leaves=FALSE,   digits=2, varlen=-3, faclen=20,
+           cex=0.4, tweak=1.7,
+           compress=TRUE,
+           snip=FALSE)
+```
+
+
+```{r}
+rpart.plot(modelo_tree, type=2, extra="auto", under=FALSE, clip.right.labs=TRUE,
+           fallen.leaves=TRUE,   digits=2, varlen=-3, faclen=15,
+           cex=0.4, tweak=1.7,
+           compress=TRUE,box.palette="auto",
+           snip=FALSE)
+```
+
+```{r}
+print(modelo_tree)
+```
+
+```{r}
+preds_prod <- predict(modelo_tree,white)
+```
+
+```{r}
+preds_cat <- predict(modelo_tree, type = "class",white)
+```
+
+```{r}
+head(preds_cat)
+```
+
+```{r}
+table(preds_cat)
+```
+
+
+# Modelo 4 - Regressão Logística
+
+
+# Predict como funcao para trazer a probabilidade da variável quality (0/1)
+```{r}
+white.previsto.com.modelo_prob<-predict(modelo_tree,white)
+```
+
+
+# Predict com tipo 'classe' retorna se a variável quality é boa ou não (ruim)
+```{r}
+white.previsto.com.modelo<-predict(modelo_tree,white,type='class')
+```
+
+```{r}
+head(white.previsto.com.modelo)
+```
+
+```{r}
+white.matriz.de.confusao<-table(quality, white.previsto.com.modelo)
+```
+
+```{r}
+white.matriz.de.confusao
+```
+
+
+```{r}
+diagonal <- diag(white.matriz.de.confusao)
+perc.erro <- 1 - sum(diagonal)/sum(white.matriz.de.confusao)
+perc.erro
+```
+
+
+# Plotar regra do Modelo Preditivo
+
+library(rattle)
+
+
+```{r}
+fancyRpartPlot(modelo_tree, cex=0.60)
+```
+
+```{r}
+fancyRpartPlot(modelo_tree, cex=0.60,  palettes=c("Greys", "Oranges"))
+```
+
+```{r}
+attach(white)
+```
+
+```{r}
+modelo_log<- glm(quality ~ residualsugar+fixedacidity+alcohol,white, family=binomial(link=logit))
+```
+
+```{r}
+summary(modelo_log)
+```
+
+```{r}
+predito<-fitted(modelo_log)
+```
+
+```{r}
+summary(predito)
+```
+
+```{r}
+hist(predito)
+```
+
+
+# Matriz de Confusão  
+```{r}
+white$fx_predito <- cut(predito, breaks=c(0,0.50,1), right=F)
+```
+
+```{r}
+plot(white$fx_predito , white$quality)
+```
+
+dev.off()
+
+# Montar a Matriz de Confusão
+```{r}
+MC <- table(white$quality, white$fx_predito , deparse.level = 2)   
+```
+
+```{r}
+show(MC) # mostra os resultados
+```
+
+```{r}
+ACC = sum(diag(MC))/sum(MC) # calcula a acurácia  
+```
+
+```{r}
+show(ACC) # mostra a acurácia
+```
+  
+# Criar variável faixa probabilidade
+```{r}
+fx_predito1 <- cut(predito, breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1), right=F)
+```
+
+# Frequência absoluta
+```{r}
+table(fx_predito1,white$quality)
+```
+
+# Frequência relativa
+```{r}
+prop.table(table(fx_predito1,white$quality),2)
+```
+
+```{r}
+plot(fx_predito1 , white$quality)
+```
+
+```{r}
+fx_predito2 <- cut(predito, breaks=c(0,0.25,0.50,0.75,1), right=F)
+```
+
+```{r}
+plot(fx_predito2 , white$quality)
+```
+
+
+# Divisao do Banco de Dados completo em Treinamento e Teste
+
+# definir % de casos de treino
+```{r}
+prt <- 2/3
+```
+
+# Amostra de Casos de Treino aleatória
+```{r}
+set.seed(2018)
+```
+
+
+```{r}
+treino <- sample(1:NROW(white), as.integer(prt*NROW(white)))
+```
+
+
+```{r}
+trainData <- white[treino,]
+```
+
+
+```{r}
+testData  <- white[-treino,]
+```
+
+
+```{r}
+prop.table(table(trainData$quality))
+```
+
+
+```{r}
+prop.table(table(testData$quality))
+```
+
+# Análises
+
+## A variável qualidade (quality) é a variável dependente. 
+## As variáveis independentes são todas as outras variáveis (conside-
+## ramos as variáveis residualsugar, fixedacidity, alcohol mais especi-
+## ficamente).
+
+## O modelo matemático da Regressão Linear e da Regressão Logísitca,
+## nos fornece as relações entre elas.
+
+## Através da função "summary",temos os parâmentros do modelo.
+
+## Em relação à qualidade do modelo, pode-se basear no parâmetro R2,
+## que se aplica tanto para a Regressão Linear, como para a Árvore de Regressão
+## Já para a Árvore de Decisão e Regressão Logística, pode-se basear na
+## Matriz de Confunsão.
+
+## Em termos de resultado, temos as seguintes conclusões:
+
+## Baseando-se nos dados, não há um método que abrange todos os melhores
+## indicadores para comparação.
+
+## A Regressão Logística é melhor nos pontos Especificidade e 
+## valor Preditivo Positivo, enquanto que a Árvore de Decisão é melhor
+## em relação à Acurácia, Sensibilidade, Eficiência e
+## Valor Preditivo Negativo.
+## No caso de termos como critério a Qualidade do Modelo para obtermos
+## os vinhos de melhor qualidade, escolheríamos a Regressão Logisitca,
+## de acordo com o Valor Preditivo Positivo (não considerando a pequena
+## diferença entre os modelos).
+
+## Para as técnicas não supervisionadas, indicaríamos a técnica de 
+## Clusters (Clusterização).
+
+
+
